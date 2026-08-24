@@ -56,37 +56,6 @@ async def root():
         "health_url": "/health"
     }
 
-@app.get("/start-session", tags=["Session"])
-async def start_session():
-    """Start an attention monitoring session."""
-    return {
-        "status": "started",
-        "message": "Attention monitoring session started"
-    }
-
-@app.get("/stop-session", tags=["Session"])
-async def stop_session():
-    """Stop the current attention monitoring session."""
-    return {
-        "status": "stopped",
-        "message": "Attention monitoring session stopped"
-    }
-
-@app.get("/pause-session", tags=["Session"])
-async def pause_session():
-    """Pause the current attention monitoring session."""
-    return {
-        "status": "paused",
-        "message": "Attention monitoring session paused"
-    }
-
-@app.get("/resume-session", tags=["Session"])
-async def resume_session():
-    """Resume the current attention monitoring session."""
-    return {
-        "status": "resumed",
-        "message": "Attention monitoring session resumed"
-    }
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
