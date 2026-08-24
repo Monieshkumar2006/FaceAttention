@@ -1,10 +1,16 @@
 import axios from 'axios';
 
 const getBaseUrl = () => {
+  const envUrl = import.meta.env?.VITE_API_URL || import.meta.env?.VITE_API_BASE_URL;
+  if (envUrl) {
+    return envUrl.replace(/\/+$/, '');
+  }
   if (typeof window !== 'undefined' && window.location) {
     const hostname = window.location.hostname || 'localhost';
-    const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
-    return `${protocol}//${hostname}:8000`;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+      return `${protocol}//${hostname}:8000`;
+    }
   }
   return 'http://localhost:8000';
 };

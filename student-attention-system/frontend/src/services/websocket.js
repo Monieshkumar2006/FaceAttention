@@ -1,8 +1,27 @@
 const getWsBaseUrl = () => {
+  const envWsUrl = import.meta.env?.VITE_WS_URL || import.meta.env?.VITE_WS_BASE_URL;
+  if (envWsUrl) {
+    return envWsUrl.replace(/\/+$/, '');
+  }
+
+  const envApiUrl = import.meta.env?.VITE_API_URL || import.meta.env?.VITE_API_BASE_URL;
+  if (envApiUrl) {
+    const cleanUrl = envApiUrl.replace(/\/+$/, '');
+    if (cleanUrl.startsWith('https://')) {
+      return cleanUrl.replace(/^https:\/\//, 'wss://');
+    }
+    if (cleanUrl.startsWith('http://')) {
+      return cleanUrl.replace(/^http:\/\//, 'ws://');
+    }
+    return cleanUrl;
+  }
+
   if (typeof window !== 'undefined' && window.location) {
     const hostname = window.location.hostname || 'localhost';
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    return `${protocol}//${hostname}:8000`;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      return `${protocol}//${hostname}:8000`;
+    }
   }
   return 'ws://localhost:8000';
 };
